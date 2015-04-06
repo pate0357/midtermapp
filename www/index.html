@@ -6,7 +6,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
     <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height,target-densitydpi=device-dpi" />
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <link href='http://fonts.googleapis.com/css?family=Mate|Flamenco' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
@@ -29,7 +29,7 @@
         <div data-role="overlay">&nbsp;</div>
 
         <div data-role="modal">
-            <h3 class="contactName">Modal Window Title</h3>
+            <h3 class="contactName">Modal Window </h3>
             <form>
                 <ul data-role="listview" id="phonenumbers">
                 </ul>
@@ -42,8 +42,8 @@
 
 
         <div id="mapPage">
-            <h2 class="titleMap">Contacts</h2>
-            <p id="locating">getiing location...</p>
+            <h2 class="heading_location"></h2>
+            <p id="locat"></p>
             <div id="map_canvas" class="mapping"></div>
             <br/>
             <input type="button" id="set" value="Set location" class="btn" />
@@ -51,8 +51,9 @@
 
     </div>
 
-    <script type="text/javascript" src="cordova.js"></script>
+    
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp" type="text/javascript"></script>
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/hammer.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
 

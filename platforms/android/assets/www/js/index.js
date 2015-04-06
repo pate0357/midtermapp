@@ -2,24 +2,29 @@ var contactList;
 var testObject = [];
 var errorDiv;
 var currentContact;
+var data;
+
 
 var app = {
     init: function () {
+        
 
         document.querySelector("[data-role=modal]").style.display = "none";
         document.querySelector("[data-role=overlay]").style.display = "none";
         document.getElementById("Cancle").addEventListener("click", app.Cancle);
-
-//        document.getElementById("set").style.display = "none";
-//        document.getElementById("set").addEventListener("click", app.init);
+        
+        //        document.getElementById("set").style.display = "none";
+        //        document.getElementById("set").addEventListener("click", app.init);
         //        contactJS.getContacts();
         var jsonObject = localStorage.getItem('testObject');
         contactList = JSON.parse(jsonObject);
-
+        
         if (!contactList) {
+            
             app.getContacts();
-        } else {
 
+        } else {
+           
             app.addContactListElement(contactList);
         }
     },
@@ -72,6 +77,7 @@ var app = {
 
         /*******this code will store data in the local storage*******/
         for (var i = 0; i < contacts.length; i++) {
+            //            console.log(contacts.length);
             var contactname = contacts[i].displayName;
             var number = contacts[i].phoneNumbers;
             var jsonObject = {
@@ -83,13 +89,16 @@ var app = {
             };
             testObject.push(jsonObject);
 
+
+
         }
         // Put the object into storage
         localStorage.setItem('testObject', JSON.stringify(testObject));
 
         // Retrieve the object from storage
         var retrievedObject = localStorage.getItem('testObject');
-        newcontact = JSON.parse(retrievedObject);
+        var newcontact = JSON.parse(retrievedObject);
+        console.log(newcontact);
 
 
         app.addContactListElement(newcontact);
@@ -99,6 +108,7 @@ var app = {
         document.querySelector("#MyContacts").innerHTML = "";
 
         for (var i = 0; i < contacts.length; i++) {
+         
             var li = document.createElement("li");
             li.innerHTML = contacts[i].myname;
             li.setAttribute("id", contacts[i].id);
@@ -121,7 +131,7 @@ var app = {
         //set timeout for error msg
         setTimeout(function () {
             errorDiv.style.display = 'none';
-        }, 3000); //3secs
+        }, 5000); //3secs
     },
 
     /***this code will used for both single and double touch event ****/
@@ -159,13 +169,26 @@ var app = {
     newmap: function (contacts) {
         document.querySelector("#mapPage").style.display = "block";
         document.querySelector("#contact").style.display = "none";
-        app.getLocation(contacts);
+        app.getcontactLocation(contacts);
+        //        app.navigate(location.href, true);
+        app.navigate( location.href, true );
 
     },
-    getLocation: function (contact) {
+    
+    navigate: function (url, addToHistory) {
+				
+		//call ajax function to load the proper content for our url
+		  //potentially use ajax to load the url itself, if it were an html page
+		  //add handler for the ajax response
+		  if( addToHistory ){
+//              alert("Hi pop");
+			history.pushState({"data":123}, null, url );  //add the url to the history array
+		  }
+	},
+    getcontactLocation: function (contact) {
 
         currentContact = contact;
-        document.querySelector(".titleMap").innerHTML = "Location of " + contact.innerHTML;
+        document.querySelector(".heading_location").innerHTML = "Location of " + contact.innerHTML;
 
 
         console.log(contact);
@@ -177,14 +200,14 @@ var app = {
 
 
             if (data[i].myname == shown_name) {
-                currentContact = data[i];
 
+                currentContact = data[i];
                 if (data[i].lat && data[i].long) {
                     document.querySelector("#set").style.display = "none";
 
                     var latitude = data[i].lat;
                     var longitude = data[i].long;
-                    document.querySelector("#locating").innerHTML = "";
+                    document.querySelector("#locat").innerHTML = "Fectching your location";
 
                     var center = new google.maps.LatLng(latitude, longitude);
                     console.log(center);
@@ -201,8 +224,6 @@ var app = {
 
                 } else {
 
-
-
                     document.querySelector("#set").style.display = "block";
 
                     var params = {
@@ -218,14 +239,14 @@ var app = {
     success: function (position) {
 
 
-        document.querySelector("#locating").innerHTML = "Double click to set position.";
+        document.querySelector("#locat").innerHTML = "Double click to set position.";
 
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
 
 
         var center = new google.maps.LatLng(latitude, longitude);
-        console.log(center);
+        //        console.log(center);
 
         //set map option
         var mapOptions = {
@@ -254,40 +275,58 @@ var app = {
     },
 
     Markermake: function (position, map) {
+            //            alert("Hi");
 
-        document.querySelector("#locating").innerHTML = "";
+            document.querySelector("#locat").innerHTML = "";
 
-        var marker = new google.maps.Marker({
-            position: position,
-            animation: google.maps.Animation.DROP,
-            map: map
-        });
-        map.panTo(position);
+            var marker = new google.maps.Marker({
+                position: position,
+                animation: google.maps.Animation.DROP,
+                map: map
+            });
+            map.panTo(position);
+//            alert("HI2");
+            var markerLat = marker.getPosition().lat();
+            var markerLong = marker.getPosition().lng();
+            console.log(markerLat);
 
-        var markerLat = marker.getPosition().lat();
-        var markerLong = marker.getPosition().lng();
+            currentContact.lat = markerLat;
+            currentContact.long = markerLong;
 
-        currentContact.lat = markerLat;
-        currentContact.long = markerLong;
+            console.log(currentContact);
 
-
-        //Update local storage
-        var id = currentContact.id;
-        data[id] = currentContact;
-
-
-        // add contact to local storage
-        localStorage.setItem('testObject', JSON.stringify(data));
-
-        //        //Get contacts from storage
-        var retrievedObject = localStorage.getItem('testObject');
-        data = JSON.parse(retrievedObject);
-
-    }
+            var id = currentContact.id;
+            data[id] = currentContact;
+            console.log(data[id]);
 
 
+            localStorage.setItem('testObject', JSON.stringify(data));
 
+
+            var retrievedObject = localStorage.getItem('testObject');
+            data = JSON.parse(retrievedObject);
+
+        }
+        //    navigate: function (url, addToHistory) {
+        //
+        //        //call ajax function to load the proper content for our url
+        //        //potentially use ajax to load the url itself, if it were an html page
+        //        //add handler for the ajax response
+        //        if (addToHistory) {
+        //            history.pushState({
+        //                "data": 123
+        //            }, null, url); //add the url to the history array
+        //        }
+        //    }
 }
 
+
+window.addEventListener("popstate", function (ev) {
+    document.querySelector("#mapPage").style.display = "none";
+        document.querySelector("#contact").style.display = "block";
+// alert("hi");block
+    app.init();
+//alert("HI 2 after page");
+});
 document.addEventListener("DOMContentLoaded", app.init);
 document.addEventListener("deviceready", app.init);
