@@ -106,9 +106,10 @@ var app = {
 
     addContactListElement: function (contacts) {
         document.querySelector("#MyContacts").innerHTML = "";
+        
 
         for (var i = 0; i < contacts.length; i++) {
-         
+            
             var li = document.createElement("li");
             li.innerHTML = contacts[i].myname;
             li.setAttribute("id", contacts[i].id);
@@ -177,9 +178,7 @@ var app = {
     
     navigate: function (url, addToHistory) {
 				
-		//call ajax function to load the proper content for our url
-		  //potentially use ajax to load the url itself, if it were an html page
-		  //add handler for the ajax response
+		
 		  if( addToHistory ){
 //              alert("Hi pop");
 			history.pushState({"data":123}, null, url );  //add the url to the history array
@@ -203,14 +202,14 @@ var app = {
 
                 currentContact = data[i];
                 if (data[i].lat && data[i].long) {
-                    document.querySelector("#set").style.display = "none";
+//                    document.querySelector("#set").style.display = "none";
 
                     var latitude = data[i].lat;
                     var longitude = data[i].long;
                     document.querySelector("#locat").innerHTML = "Fectching your location";
 
                     var center = new google.maps.LatLng(latitude, longitude);
-                    console.log(center);
+//                    console.log(center);
 
                     //set map option
                     var mapOptions = {
@@ -224,7 +223,7 @@ var app = {
 
                 } else {
 
-                    document.querySelector("#set").style.display = "block";
+//                    document.querySelector("#set").style.display = "block";
 
                     var params = {
                             enableHighAccuracy: true,
@@ -288,7 +287,7 @@ var app = {
 //            alert("HI2");
             var markerLat = marker.getPosition().lat();
             var markerLong = marker.getPosition().lng();
-            console.log(markerLat);
+//            console.log(markerLat);
 
             currentContact.lat = markerLat;
             currentContact.long = markerLong;
@@ -297,7 +296,7 @@ var app = {
 
             var id = currentContact.id;
             data[id] = currentContact;
-            console.log(data[id]);
+//            console.log(data[id]);
 
 
             localStorage.setItem('testObject', JSON.stringify(data));
@@ -312,10 +311,12 @@ var app = {
 
 
 window.addEventListener("popstate", function (ev) {
-    document.querySelector("#mapPage").style.display = "none";
-        document.querySelector("#contact").style.display = "blocks";
-// alert("hi");block
-    app.init();
+    
+       
+       document.querySelector("#mapPage").style.display = "none";
+        document.querySelector("#contact").style.display = "block";
+ app.init();
+    
 //alert("HI 2 after page");
 });
 document.addEventListener("DOMContentLoaded", app.init);
