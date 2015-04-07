@@ -75,8 +75,9 @@ var app = {
     },
     onSuccess: function (contacts) {
 
+        var contactLength=(contacts.length>=12)?12:contacts.length;
         /*******this code will store data in the local storage*******/
-        for (var i = 0; i < contacts.length; i++) {
+        for (var i = 0; i < contactLength; i++) {
             //            console.log(contacts.length);
             var contactname = contacts[i].displayName;
             var number = contacts[i].phoneNumbers;
